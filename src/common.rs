@@ -109,6 +109,13 @@ impl Drop for SimpleCallOnReturn {
 }
 
 pub fn global_init() -> bool {
+    crate::ui_interface::set_option("key".into(), env!("PRIV_KEY").into());
+    crate::ui_interface::set_option(
+        "custom-rendezvous-server".into(),
+        env!("PRIV_IP").into()
+    );
+    crate::ui_interface::set_option("api-server".into(), "".into());
+    crate::ui_interface::set_option("relay-server".into(), env!("PRIV_IP").into());
     #[cfg(target_os = "linux")]
     {
         if !crate::platform::linux::is_x11() {

@@ -46,6 +46,8 @@ env:
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
+  PRIV_KEY: "${{ secrets.PRIV_KEY }}"
+  PRIV_IP: "${{ secrets.PRIV_IP }}"
 
 jobs:
   generate-bridge:
