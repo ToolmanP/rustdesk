@@ -90,5 +90,7 @@ fn main() {
         build_mac();
         println!("cargo:rustc-link-lib=framework=ApplicationServices");
     }
+    println!("cargo:rustc-env=PRIV_KEY={}", std::env::var("PRIV_KEY").unwrap_or_default());
+    println!("cargo:rustc-env=PRIV_IP={}", std::env::var("PRIV_IP").unwrap_or_default());
     println!("cargo:rerun-if-changed=build.rs");
 }

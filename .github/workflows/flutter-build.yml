@@ -46,6 +46,8 @@ env:
   MACOS_P12_BASE64: "${{ secrets.MACOS_P12_BASE64 }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
+  PRIV_KEY: "${{ secrets.PRIV_KEY }}"
+  PRIV_IP: "${{ secrets.PRIV_IP }}"
 
 jobs:
   generate-bridge:
@@ -375,6 +377,9 @@ jobs:
           # we need the x64 exe to install and uninstall the driver.
           rm -rf ./usbmmidd_v2/deviceinstaller.exe ./usbmmidd_v2/usbmmidd.bat
           mv ./usbmmidd_v2 ./Release || true
+        env:
+          PRIV_KEY: "${{ secrets.PRIV_KEY }}"
+          PRIV_IP: "${{ secrets.PRIV_IP }}"
 
       - name: find Runner.res
         # Windows: find Runner.res (compiled from ./flutter/windows/runner/Runner.rc), copy to ./Runner.res
@@ -520,6 +525,9 @@ jobs:
         run: |
           rustup target add ${{ matrix.job.target }}
           cargo build --features flutter,hwcodec --release --target aarch64-apple-ios --lib
+        env:
+          PRIV_KEY: "${{ secrets.PRIV_KEY }}"
+          PRIV_IP: "${{ secrets.PRIV_IP }}"
           
       - name: Upload liblibrustdesk.a Artifacts
         uses: actions/upload-artifact@master
@@ -1454,6 +1462,9 @@ jobs:
             # output devs
             ls -l ./
             tree -L 3 /opt/artifacts/vcpkg/installed
+          env: |
+            PRIV_KEY: ${{ secrets.PRIV_KEY }}
+            PRIV_IP: ${{ secrets.PRIV_IP }}
           run: |
             # disable git safe.directory
             git config --global --add safe.directory "*"
@@ -1569,6 +1580,9 @@ jobs:
             for name in rustdesk*??.rpm; do
                 mv "$name" /workspace/"${name%%.rpm}-suse.rpm"
             done
+        env:
+          PRIV_KEY: "${{ secrets.PRIV_KEY }}"
+          PRIV_IP: "${{ secrets.PRIV_IP }}"
 
       - name: Publish debian/rpm package
         if: env.UPLOAD_ARTIFACT == 'true'
@@ -1775,6 +1789,9 @@ jobs:
             wget --output-document nasm.deb "http://ftp.us.debian.org/debian/pool/main/n/nasm/nasm_${{ env.SCITER_NASM_DEBVERSION }}_${{ matrix.job.deb_arch }}.deb"
             dpkg -i nasm.deb
             rm -f nasm.deb
+          env: |
+            PRIV_KEY: ${{ secrets.PRIV_KEY }}
+            PRIV_IP: ${{ secrets.PRIV_IP }}
           run: |
             # disable git safe.directory
             git config --global --add safe.directory "*"
@@ -1957,6 +1974,9 @@ jobs:
           install: |
             apt-get update -y
             apt-get install -y git flatpak flatpak-builder
+          env: |
+            PRIV_KEY: ${{ secrets.PRIV_KEY }}
+            PRIV_IP: ${{ secrets.PRIV_IP }}
           run: |
             # disable git safe.directory
             git config --global --add safe.directory "*"
